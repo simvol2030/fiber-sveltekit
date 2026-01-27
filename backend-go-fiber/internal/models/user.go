@@ -22,6 +22,8 @@ type User struct {
 	PasswordHash string `gorm:"not null"`
 	Name         *string
 	Role         Role           `gorm:"type:text;default:user;not null"`
+	IsActive     bool           `gorm:"default:true;not null"`  // Account active status
+	LastLoginAt  *time.Time     `json:"lastLoginAt"`            // Last login timestamp
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
 	DeletedAt    gorm.DeletedAt `gorm:"index"` // Soft delete support
@@ -59,20 +61,51 @@ func (r *RefreshToken) BeforeCreate(tx *gorm.DB) error {
 
 // UserResponse is the response format for user data
 type UserResponse struct {
-	ID        string    `json:"id"`
-	Email     string    `json:"email"`
-	Name      *string   `json:"name"`
-	Role      Role      `json:"role"`
-	CreatedAt time.Time `json:"createdAt"`
+	ID          string     `json:"id"`
+	Email       string     `json:"email"`
+	Name        *string    `json:"name"`
+	Role        Role       `json:"role"`
+	IsActive    bool       `json:"isActive"`
+	LastLoginAt *time.Time `json:"lastLoginAt"`
+	CreatedAt   time.Time  `json:"createdAt"`
+	UpdatedAt   time.Time  `json:"updatedAt"`
 }
 
 func (u *User) ToResponse() UserResponse {
 	return UserResponse{
-		ID:        u.ID,
-		Email:     u.Email,
-		Name:      u.Name,
-		Role:      u.Role,
-		CreatedAt: u.CreatedAt,
+		ID:          u.ID,
+		Email:       u.Email,
+		Name:        u.Name,
+		Role:        u.Role,
+		IsActive:    u.IsActive,
+		LastLoginAt: u.LastLoginAt,
+		CreatedAt:   u.CreatedAt,
+		UpdatedAt:   u.UpdatedAt,
+	}
+}
+
+// AdminUserResponse is the response format for admin user management
+type AdminUserResponse struct {
+	ID          string     `json:"id"`
+	Email       string     `json:"email"`
+	Name        *string    `json:"name"`
+	Role        Role       `json:"role"`
+	IsActive    bool       `json:"isActive"`
+	LastLoginAt *time.Time `json:"lastLoginAt"`
+	CreatedAt   time.Time  `json:"createdAt"`
+	UpdatedAt   time.Time  `json:"updatedAt"`
+}
+
+func (u *User) ToAdminResponse() AdminUserResponse {
+	return AdminUserResponse{
+		ID:          u.ID,
+		Email:       u.Email,
+		Name:        u.Name,
+		Role:        u.Role,
+		IsActive:    u.IsActive,
+		LastLoginAt: u.LastLoginAt,
+		CreatedAt:   u.CreatedAt,
+		UpdatedAt:   u.UpdatedAt,
 	}
 }
 
