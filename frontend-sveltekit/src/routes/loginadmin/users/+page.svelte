@@ -20,6 +20,11 @@
 	let showDeleteConfirm = $state(false);
 	let userToDelete = $state<AdminUser | null>(null);
 
+	// Derived message for delete confirmation
+	const deleteMessage = $derived(
+		`Are you sure you want to delete ${userToDelete?.email || 'this user'}? This action cannot be undone.`
+	);
+
 	const columns: Column[] = [
 		{ key: 'email', label: 'Email', sortable: true },
 		{ key: 'name', label: 'Name', sortable: true },
@@ -171,7 +176,7 @@
 	<ConfirmDialog
 		open={showDeleteConfirm}
 		title="Delete User"
-		message="Are you sure you want to delete {userToDelete?.email}? This action cannot be undone."
+		message={deleteMessage}
 		confirmLabel="Delete"
 		variant="danger"
 		onConfirm={handleDelete}

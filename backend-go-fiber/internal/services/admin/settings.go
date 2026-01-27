@@ -19,7 +19,7 @@ func NewSettingsService(db *gorm.DB) *SettingsService {
 // GetAll returns all settings
 func (s *SettingsService) GetAll() ([]models.AppSettingsResponse, error) {
 	var settings []models.AppSettings
-	if err := s.db.Order("\"group\" ASC, key ASC").Find(&settings).Error; err != nil {
+	if err := s.db.Order("setting_group ASC, key ASC").Find(&settings).Error; err != nil {
 		return nil, err
 	}
 
@@ -46,7 +46,7 @@ func (s *SettingsService) GetByKey(key string) (*models.AppSettings, error) {
 // GetByGroup returns settings by group
 func (s *SettingsService) GetByGroup(group string) ([]models.AppSettingsResponse, error) {
 	var settings []models.AppSettings
-	if err := s.db.Where("\"group\" = ?", group).Order("key ASC").Find(&settings).Error; err != nil {
+	if err := s.db.Where("setting_group = ?", group).Order("key ASC").Find(&settings).Error; err != nil {
 		return nil, err
 	}
 

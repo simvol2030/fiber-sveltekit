@@ -2,6 +2,7 @@ package admin
 
 import (
 	"errors"
+	"strings"
 	"time"
 
 	"backend-go-fiber/internal/models"
@@ -9,6 +10,14 @@ import (
 
 	"gorm.io/gorm"
 )
+
+// escapeLikeWildcards escapes SQL LIKE wildcards to prevent injection
+func escapeLikeWildcards(s string) string {
+	s = strings.ReplaceAll(s, "\\", "\\\\")
+	s = strings.ReplaceAll(s, "%", "\\%")
+	s = strings.ReplaceAll(s, "_", "\\_")
+	return s
+}
 
 type UsersService struct {
 	db *gorm.DB
@@ -75,10 +84,11 @@ func (s *UsersService) List(params ListParams) (*ListResult, error) {
 	// Build query
 	query := s.db.Model(&models.User{})
 
-	// Search filter
+	// Search filter (escape wildcards to prevent SQL injection)
 	if params.Search != "" {
-		searchPattern := "%" + params.Search + "%"
-		query = query.Where("email LIKE ? OR name LIKE ?", searchPattern, searchPattern)
+		escapedSearch := escapeLikeWildcards(params.Search)
+		searchPattern := "%" + escapedSearch + "%"
+		query = query.Where("email LIKE ? ESCAPE '\\' OR name LIKE ? ESCAPE '\\'", searchPattern, searchPattern)
 	}
 
 	// Role filter

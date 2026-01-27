@@ -9,9 +9,10 @@
 
 	interface Props {
 		title?: string;
+		sidebarCollapsed?: boolean;
 	}
 
-	let { title = 'Dashboard' }: Props = $props();
+	let { title = 'Dashboard', sidebarCollapsed = false }: Props = $props();
 
 	const admin = getAdminState();
 	const auth = getAuthState();
@@ -32,7 +33,7 @@
 	}
 </script>
 
-<header class="admin-header">
+<header class="admin-header" class:sidebar-collapsed={sidebarCollapsed}>
 	<div class="header-left">
 		<button class="menu-btn mobile-only" onclick={toggleMobileSidebar} aria-label="Toggle menu">
 			☰
@@ -90,7 +91,7 @@
 		transition: left 0.3s ease;
 	}
 
-	:global(.sidebar.collapsed) ~ .admin-header {
+	.admin-header.sidebar-collapsed {
 		left: var(--admin-sidebar-collapsed-width);
 	}
 

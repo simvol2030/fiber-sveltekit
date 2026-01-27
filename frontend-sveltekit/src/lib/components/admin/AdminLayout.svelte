@@ -22,7 +22,7 @@
 
 <div class="admin-layout" class:sidebar-collapsed={admin.sidebarCollapsed}>
 	<Sidebar />
-	<Header {title} />
+	<Header {title} sidebarCollapsed={admin.sidebarCollapsed} />
 
 	<main class="admin-main">
 		<div class="admin-content">

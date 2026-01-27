@@ -23,8 +23,8 @@ type AppSettings struct {
 	Key       string      `gorm:"uniqueIndex;not null" json:"key"`
 	Value     string      `gorm:"type:text" json:"value"`
 	Type      SettingType `gorm:"type:text;default:string" json:"type"`
-	Label     string      `gorm:"type:text" json:"label"`     // Human-readable label
-	Group     string      `gorm:"type:text" json:"group"`     // Group for UI organization
+	Label        string      `gorm:"type:text" json:"label"`                        // Human-readable label
+	SettingGroup string      `gorm:"column:setting_group;type:text" json:"group"`   // Group for UI organization
 	UpdatedAt time.Time   `json:"updatedAt"`
 	CreatedAt time.Time   `json:"createdAt"`
 }
@@ -57,7 +57,7 @@ func (s *AppSettings) ToResponse() AppSettingsResponse {
 		Value:     s.Value,
 		Type:      s.Type,
 		Label:     s.Label,
-		Group:     s.Group,
+		Group:     s.SettingGroup,
 		UpdatedAt: s.UpdatedAt,
 	}
 }
@@ -65,10 +65,10 @@ func (s *AppSettings) ToResponse() AppSettingsResponse {
 // DefaultSettings returns default application settings
 func DefaultSettings() []AppSettings {
 	return []AppSettings{
-		{Key: "app_name", Value: "My App", Type: SettingTypeString, Label: "Application Name", Group: "general"},
-		{Key: "app_description", Value: "A Go Fiber + SvelteKit application", Type: SettingTypeString, Label: "Description", Group: "general"},
-		{Key: "maintenance_mode", Value: "false", Type: SettingTypeBoolean, Label: "Maintenance Mode", Group: "general"},
-		{Key: "allow_registration", Value: "true", Type: SettingTypeBoolean, Label: "Allow Registration", Group: "auth"},
-		{Key: "max_login_attempts", Value: "5", Type: SettingTypeNumber, Label: "Max Login Attempts", Group: "auth"},
+		{Key: "app_name", Value: "My App", Type: SettingTypeString, Label: "Application Name", SettingGroup: "general"},
+		{Key: "app_description", Value: "A Go Fiber + SvelteKit application", Type: SettingTypeString, Label: "Description", SettingGroup: "general"},
+		{Key: "maintenance_mode", Value: "false", Type: SettingTypeBoolean, Label: "Maintenance Mode", SettingGroup: "general"},
+		{Key: "allow_registration", Value: "true", Type: SettingTypeBoolean, Label: "Allow Registration", SettingGroup: "auth"},
+		{Key: "max_login_attempts", Value: "5", Type: SettingTypeNumber, Label: "Max Login Attempts", SettingGroup: "auth"},
 	}
 }

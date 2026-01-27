@@ -13,6 +13,14 @@
 	let showDeleteConfirm = $state(false);
 	let fileToDelete = $state<FileInfo | null>(null);
 
+	// Derived values for delete confirmation
+	const deleteTitle = $derived(
+		`Delete ${fileToDelete?.isDir ? 'Folder' : 'File'}`
+	);
+	const deleteMessage = $derived(
+		`Are you sure you want to delete '${fileToDelete?.name || ''}'? ${fileToDelete?.isDir ? 'All contents will be deleted.' : ''} This action cannot be undone.`
+	);
+
 	async function loadFiles(dir: string = '') {
 		loading = true;
 
@@ -199,8 +207,8 @@
 
 	<ConfirmDialog
 		open={showDeleteConfirm}
-		title="Delete {fileToDelete?.isDir ? 'Folder' : 'File'}"
-		message="Are you sure you want to delete '{fileToDelete?.name}'? {fileToDelete?.isDir ? 'All contents will be deleted.' : ''} This action cannot be undone."
+		title={deleteTitle}
+		message={deleteMessage}
 		confirmLabel="Delete"
 		variant="danger"
 		onConfirm={handleDelete}

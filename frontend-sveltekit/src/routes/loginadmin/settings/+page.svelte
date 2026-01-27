@@ -8,7 +8,7 @@
 	let saving = $state(false);
 
 	// Group settings by their group property
-	let groupedSettings = $derived(() => {
+	function getGroupedSettings(): Record<string, AppSetting[]> {
 		const groups: Record<string, AppSetting[]> = {};
 		settings.forEach((setting) => {
 			const group = setting.group || 'other';
@@ -18,7 +18,9 @@
 			groups[group].push(setting);
 		});
 		return groups;
-	});
+	}
+
+	const groupedSettings = $derived(getGroupedSettings());
 
 	// Track modified values
 	let modifiedValues = $state<Record<string, string>>({});
@@ -137,7 +139,7 @@
 			<span>Loading settings...</span>
 		</div>
 	{:else}
-		{#each Object.entries(groupedSettings()) as [group, groupSettings]}
+		{#each Object.entries(groupedSettings) as [group, groupSettings]}
 			<div class="settings-group">
 				<h3 class="group-title">
 					<span class="group-icon">{getGroupIcon(group)}</span>

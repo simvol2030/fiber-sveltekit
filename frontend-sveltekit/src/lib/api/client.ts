@@ -21,7 +21,11 @@ export interface User {
 	id: string;
 	email: string;
 	name: string | null;
+	role: 'user' | 'admin';
+	isActive: boolean;
+	lastLoginAt: string | null;
 	createdAt: string;
+	updatedAt: string;
 }
 
 export interface AuthTokens {

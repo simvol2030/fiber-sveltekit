@@ -163,8 +163,10 @@
 				{#if loading}
 					<tr>
 						<td colspan={columns.length + (actions.length > 0 ? 1 : 0)} class="loading-cell">
-							<div class="loading-spinner"></div>
-							<span>Loading...</span>
+							<div class="loading-content">
+								<div class="loading-spinner"></div>
+								<span>Loading...</span>
+							</div>
 						</td>
 					</tr>
 				{:else if data.length === 0}
@@ -336,7 +338,7 @@
 		color: var(--color-text-secondary);
 	}
 
-	.loading-cell {
+	.loading-content {
 		display: flex;
 		align-items: center;
 		justify-content: center;
