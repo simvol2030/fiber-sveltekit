@@ -1,0 +1,7 @@
+{
+  "projectName": "go-fiber-sveltekit",
+  "hooks": {
+    "enabled": false,
+    "notifyScript": "./hooks/notify.sh"
+  }
+}

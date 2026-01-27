@@ -1,0 +1,64 @@
+# =============================================================================
+# Docker Build Context Ignore
+# =============================================================================
+# Exclude files not needed in the Docker build to speed up builds
+# and reduce image size
+# =============================================================================
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+*.md
+docs/
+
+# IDE and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Environment files (NEVER include in image)
+.env
+.env.*
+!.env.example
+
+# Dependencies (reinstalled in Docker)
+node_modules/
+
+# Build output (rebuilt in Docker)
+build/
+dist/
+.svelte-kit/
+
+# Test files and coverage
+coverage/
+*.test.ts
+*.spec.ts
+__tests__/
+vitest.config.*
+playwright.config.*
+playwright-report/
+test-results/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Development files
+.npmrc
+.yarnrc
+.pnpm-debug.log
+
+# Storybook (if any)
+storybook-static/
