@@ -96,7 +96,7 @@ func (h *SettingsHandler) UpdateBatch(c *fiber.Ctx) error {
 
 	// Validate input
 	if errors := utils.ValidateStruct(input); errors != nil {
-		return utils.SendError(c, "VALIDATION_ERROR", "Validation failed", fiber.StatusBadRequest, errors)
+		return utils.SendValidationError(c, errors)
 	}
 
 	settings, err := h.service.UpdateBatch(input.Settings)

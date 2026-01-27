@@ -81,7 +81,7 @@ func (h *UsersHandler) Create(c *fiber.Ctx) error {
 
 	// Validate input
 	if errors := utils.ValidateStruct(input); errors != nil {
-		return utils.SendError(c, "VALIDATION_ERROR", "Validation failed", fiber.StatusBadRequest, errors)
+		return utils.SendValidationError(c, errors)
 	}
 
 	user, err := h.service.Create(input)
@@ -110,7 +110,7 @@ func (h *UsersHandler) Update(c *fiber.Ctx) error {
 
 	// Validate input
 	if errors := utils.ValidateStruct(input); errors != nil {
-		return utils.SendError(c, "VALIDATION_ERROR", "Validation failed", fiber.StatusBadRequest, errors)
+		return utils.SendValidationError(c, errors)
 	}
 
 	user, err := h.service.Update(id, input)
