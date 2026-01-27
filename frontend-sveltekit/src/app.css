@@ -14,6 +14,61 @@
 	--radius: 0.5rem;
 	--shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
 	--shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+
+	/* Admin Panel Variables */
+	--admin-sidebar-width: 260px;
+	--admin-sidebar-collapsed-width: 64px;
+	--admin-sidebar-bg: #1a1a2e;
+	--admin-sidebar-text: #a0aec0;
+	--admin-sidebar-text-hover: #ffffff;
+	--admin-sidebar-active: #4f46e5;
+	--admin-sidebar-active-bg: rgba(79, 70, 229, 0.1);
+
+	--admin-header-height: 64px;
+	--admin-header-bg: #ffffff;
+	--admin-header-border: #e2e8f0;
+
+	--admin-content-bg: #f7fafc;
+
+	--admin-card-bg: #ffffff;
+	--admin-card-border: #e2e8f0;
+	--admin-card-shadow: 0 1px 3px rgba(0,0,0,0.1);
+
+	--admin-table-header-bg: #f7fafc;
+	--admin-table-row-hover: #edf2f7;
+	--admin-table-border: #e2e8f0;
+
+	--admin-badge-active: #48bb78;
+	--admin-badge-inactive: #a0aec0;
+	--admin-badge-admin: #4f46e5;
+	--admin-badge-user: #3b82f6;
+}
+
+/* Dark theme for admin */
+[data-theme="dark"] {
+	--admin-sidebar-bg: #0f0f1a;
+	--admin-sidebar-text: #718096;
+	--admin-sidebar-text-hover: #e2e8f0;
+	--admin-sidebar-active-bg: rgba(79, 70, 229, 0.2);
+
+	--admin-header-bg: #1a1a2e;
+	--admin-header-border: #2d3748;
+
+	--admin-content-bg: #0f0f1a;
+
+	--admin-card-bg: #1a1a2e;
+	--admin-card-border: #2d3748;
+	--admin-card-shadow: 0 1px 3px rgba(0,0,0,0.3);
+
+	--admin-table-header-bg: #1a1a2e;
+	--admin-table-row-hover: #2d3748;
+	--admin-table-border: #2d3748;
+
+	--color-bg: #0f0f1a;
+	--color-bg-secondary: #1a1a2e;
+	--color-text: #e2e8f0;
+	--color-text-secondary: #a0aec0;
+	--color-border: #2d3748;
 }
 
 * {

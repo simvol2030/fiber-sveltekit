@@ -9,7 +9,7 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=${NODE_ENV:-production}
-      - PUBLIC_API_URL=${PUBLIC_API_URL:-http://localhost:3001}
+      - API_URL=${API_URL:-http://backend:3001}
       - ORIGIN=${ORIGIN:-http://localhost:3000}
     depends_on:
       backend:

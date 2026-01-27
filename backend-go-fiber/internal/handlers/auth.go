@@ -17,7 +17,7 @@ func NewAuthHandler(authService *services.AuthService) *AuthHandler {
 	return &AuthHandler{authService: authService}
 }
 
-const refreshTokenCookie = "refreshToken"
+const refreshTokenCookie = "refresh_token"
 
 func (h *AuthHandler) Register(c *fiber.Ctx) error {
 	var input services.RegisterInput

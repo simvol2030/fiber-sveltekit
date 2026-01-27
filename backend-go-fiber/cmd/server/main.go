@@ -8,9 +8,11 @@ import (
 	"time"
 
 	"backend-go-fiber/internal/handlers"
+	adminHandlers "backend-go-fiber/internal/handlers/admin"
 	"backend-go-fiber/internal/middleware"
 	"backend-go-fiber/internal/models"
 	"backend-go-fiber/internal/services"
+	adminServices "backend-go-fiber/internal/services/admin"
 	"backend-go-fiber/internal/services/email"
 	"backend-go-fiber/internal/services/storage"
 	"backend-go-fiber/internal/services/upload"
@@ -124,8 +126,19 @@ func main() {
 	}
 
 	// Auto-migrate
-	if err := db.AutoMigrate(&models.User{}, &models.RefreshToken{}, &models.PasswordResetToken{}); err != nil {
+	if err := db.AutoMigrate(&models.User{}, &models.RefreshToken{}, &models.PasswordResetToken{}, &models.AppSettings{}); err != nil {
 		log.Fatal().Err(err).Msg("Failed to migrate database")
+	}
+
+	// Seed default settings if not exist
+	var settingsCount int64
+	db.Model(&models.AppSettings{}).Count(&settingsCount)
+	if settingsCount == 0 {
+		defaultSettings := models.DefaultSettings()
+		for _, setting := range defaultSettings {
+			db.Create(&setting)
+		}
+		log.Info().Msg("Default settings seeded")
 	}
 
 	// Create Fiber app
@@ -257,6 +270,43 @@ func main() {
 
 	// Serve uploaded files (local storage only)
 	app.Static("/uploads", "./data/uploads")
+
+	// ==========================================================================
+	// Admin Routes: /api/admin/*
+	// ==========================================================================
+	// Admin services
+	dashboardService := adminServices.NewDashboardService(db)
+	usersService := adminServices.NewUsersService(db)
+	settingsService := adminServices.NewSettingsService(db)
+
+	// Admin handlers
+	dashboardHandler := adminHandlers.NewDashboardHandler(dashboardService)
+	usersHandler := adminHandlers.NewUsersHandler(usersService)
+	filesHandler := adminHandlers.NewFilesHandler("./data/uploads")
+	settingsHandler := adminHandlers.NewSettingsHandler(settingsService)
+
+	// Admin routes group with auth + admin middleware
+	adminGroup := api.Group("/admin", middleware.AuthMiddleware(), middleware.AdminOnly(db))
+
+	// Dashboard
+	adminGroup.Get("/dashboard", dashboardHandler.GetStats)
+
+	// Users CRUD
+	adminGroup.Get("/users", usersHandler.List)
+	adminGroup.Get("/users/:id", usersHandler.Get)
+	adminGroup.Post("/users", usersHandler.Create)
+	adminGroup.Put("/users/:id", usersHandler.Update)
+	adminGroup.Delete("/users/:id", usersHandler.Delete)
+
+	// Files
+	adminGroup.Get("/files", filesHandler.List)
+	adminGroup.Delete("/files/*", filesHandler.Delete)
+
+	// Settings
+	adminGroup.Get("/settings", settingsHandler.GetAll)
+	adminGroup.Get("/settings/:key", settingsHandler.Get)
+	adminGroup.Put("/settings/:key", settingsHandler.Update)
+	adminGroup.Put("/settings", settingsHandler.UpdateBatch)
 
 	// ==========================================================================
 	// Add your routes here

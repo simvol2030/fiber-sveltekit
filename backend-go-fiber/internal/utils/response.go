@@ -14,9 +14,9 @@ type APIResponse struct {
 }
 
 type APIError struct {
-	Code    string        `json:"code"`
-	Message string        `json:"message"`
-	Details []FieldError  `json:"details,omitempty"`
+	Code    string       `json:"code"`
+	Message string       `json:"message"`
+	Details []FieldError `json:"details,omitempty"`
 }
 
 type FieldError struct {
@@ -75,4 +75,16 @@ func SendError(c *fiber.Ctx, code string, message string, statusCode int, detail
 			RequestID: reqIDStr,
 		},
 	})
+}
+
+// SendValidationError sends a validation error response with field details
+func SendValidationError(c *fiber.Ctx, validationErrors []ValidationError) error {
+	fieldErrors := make([]FieldError, len(validationErrors))
+	for i, ve := range validationErrors {
+		fieldErrors[i] = FieldError{
+			Field:   ve.Field,
+			Message: ve.Message,
+		}
+	}
+	return SendError(c, "VALIDATION_ERROR", "Validation failed", fiber.StatusBadRequest, fieldErrors)
 }

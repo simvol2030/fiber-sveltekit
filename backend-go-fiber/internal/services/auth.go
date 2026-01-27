@@ -86,6 +86,11 @@ func (s *AuthService) Login(input LoginInput) (*AuthResult, error) {
 		return nil, errors.New("invalid credentials")
 	}
 
+	// Update last login timestamp
+	now := time.Now()
+	user.LastLoginAt = &now
+	s.db.Model(&user).Update("last_login_at", now)
+
 	accessToken, err := utils.GenerateAccessToken(utils.JWTPayload{
 		UserID: user.ID,
 		Email:  user.Email,
