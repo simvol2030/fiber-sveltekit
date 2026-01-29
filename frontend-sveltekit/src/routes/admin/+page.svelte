@@ -117,7 +117,7 @@
 			<div class="admin-card">
 				<div class="card-header">
 					<h3 class="card-title">Recent Users</h3>
-					<a href="/loginadmin/users" class="view-all">View All →</a>
+					<a href="/admin/users" class="view-all">View All →</a>
 				</div>
 				{#if stats.recentUsers.length === 0}
 					<p class="empty-message">No users yet</p>
@@ -143,19 +143,19 @@
 			<div class="admin-card">
 				<h3 class="card-title">Quick Actions</h3>
 				<div class="quick-actions">
-					<a href="/loginadmin/users/new" class="action-link">
+					<a href="/admin/users/new" class="action-link">
 						<span class="action-icon">➕</span>
 						<span>Add New User</span>
 					</a>
-					<a href="/loginadmin/users" class="action-link">
+					<a href="/admin/users" class="action-link">
 						<span class="action-icon">👥</span>
 						<span>Manage Users</span>
 					</a>
-					<a href="/loginadmin/files" class="action-link">
+					<a href="/admin/files" class="action-link">
 						<span class="action-icon">📁</span>
 						<span>View Files</span>
 					</a>
-					<a href="/loginadmin/settings" class="action-link">
+					<a href="/admin/settings" class="action-link">
 						<span class="action-icon">⚙️</span>
 						<span>App Settings</span>
 					</a>

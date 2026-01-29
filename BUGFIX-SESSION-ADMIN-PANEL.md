@@ -52,17 +52,17 @@
 **Fix:** Использовать CSS custom property или передавать состояние через props.
 
 ### BUG-007: Settings page - wrong $derived usage [CRITICAL]
-**File:** `frontend-sveltekit/src/routes/loginadmin/settings/+page.svelte:11-21`
+**File:** `frontend-sveltekit/src/routes/admin/settings/+page.svelte:11-21`
 **Problem:** `$derived(() => {...})` - неправильный синтаксис. Должно быть `$derived.by(() => {...})` для функции или просто `$derived(expression)`.
 **Fix:** Исправить на `$derived.by(() => {...})`.
 
 ### BUG-008: Confirm dialog message interpolation [MAJOR]
-**File:** `frontend-sveltekit/src/routes/loginadmin/users/+page.svelte:174`
+**File:** `frontend-sveltekit/src/routes/admin/users/+page.svelte:174`
 **Problem:** `message="Are you sure you want to delete {userToDelete?.email}?"` - интерполяция внутри атрибута не работает.
 **Fix:** Использовать template literal или составить строку отдельно.
 
 ### BUG-009: Files page confirm dialog same issue [MAJOR]
-**File:** `frontend-sveltekit/src/routes/loginadmin/files/+page.svelte:203`
+**File:** `frontend-sveltekit/src/routes/admin/files/+page.svelte:203`
 **Problem:** Та же проблема с интерполяцией в атрибуте message.
 **Fix:** Использовать template literal.
 
@@ -87,7 +87,7 @@
 **Fix:** Проверить что все endpoints используют правильный base path.
 
 ### BUG-014: Profile page data access [MINOR]
-**File:** `frontend-sveltekit/src/routes/loginadmin/profile/+page.svelte:10-11`
+**File:** `frontend-sveltekit/src/routes/admin/profile/+page.svelte:10-11`
 **Problem:** Использует `$page.data.user`, но данные уже загружаются в layout.server.ts и могут быть undefined.
 **Fix:** Использовать данные из layout или добавить fallback.
 

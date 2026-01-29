@@ -64,11 +64,11 @@
 				user = response.data;
 			} else {
 				toast.error(response.error?.message || 'Failed to load user');
-				goto('/loginadmin/users');
+				goto('/admin/users');
 			}
 		} catch (e) {
 			toast.error('Failed to load user');
-			goto('/loginadmin/users');
+			goto('/admin/users');
 		} finally {
 			loading = false;
 		}
@@ -94,7 +94,7 @@
 
 			if (response.success) {
 				toast.success('User updated successfully');
-				goto('/loginadmin/users');
+				goto('/admin/users');
 			} else {
 				toast.error(response.error?.message || 'Failed to update user');
 			}
@@ -106,7 +106,7 @@
 	}
 
 	function handleCancel() {
-		goto('/loginadmin/users');
+		goto('/admin/users');
 	}
 
 	onMount(() => {
@@ -128,7 +128,7 @@
 
 <div class="edit-user-page">
 	<div class="page-header">
-		<a href="/loginadmin/users" class="back-link">← Back to Users</a>
+		<a href="/admin/users" class="back-link">← Back to Users</a>
 		<h2 class="page-title">Edit User</h2>
 	</div>
 

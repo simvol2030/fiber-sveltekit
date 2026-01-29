@@ -8,13 +8,13 @@
 	function getPageTitle(): string {
 		const path = $page.url.pathname;
 
-		if (path === '/loginadmin') return 'Dashboard';
-		if (path.startsWith('/loginadmin/users/new')) return 'Create User';
-		if (path.match(/\/loginadmin\/users\/[^/]+$/)) return 'Edit User';
-		if (path.startsWith('/loginadmin/users')) return 'Users';
-		if (path.startsWith('/loginadmin/files')) return 'Files';
-		if (path.startsWith('/loginadmin/settings')) return 'Settings';
-		if (path.startsWith('/loginadmin/profile')) return 'Profile';
+		if (path === '/admin') return 'Dashboard';
+		if (path.startsWith('/admin/users/new')) return 'Create User';
+		if (path.match(/\/admin\/users\/[^/]+$/)) return 'Edit User';
+		if (path.startsWith('/admin/users')) return 'Users';
+		if (path.startsWith('/admin/files')) return 'Files';
+		if (path.startsWith('/admin/settings')) return 'Settings';
+		if (path.startsWith('/admin/profile')) return 'Profile';
 
 		return 'Admin';
 	}

@@ -57,10 +57,10 @@
 
 			{#if showUserMenu}
 				<div class="user-menu">
-					<a href="/loginadmin/profile" class="menu-item" onclick={closeUserMenu}>
+					<a href="/admin/profile" class="menu-item" onclick={closeUserMenu}>
 						<span>👤</span> Profile
 					</a>
-					<a href="/loginadmin/settings" class="menu-item" onclick={closeUserMenu}>
+					<a href="/admin/settings" class="menu-item" onclick={closeUserMenu}>
 						<span>⚙️</span> Settings
 					</a>
 					<hr />

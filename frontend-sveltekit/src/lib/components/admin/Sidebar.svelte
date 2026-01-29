@@ -17,17 +17,17 @@
 	}
 
 	const menuItems: MenuItem[] = [
-		{ icon: '📊', label: 'Dashboard', href: '/loginadmin' },
-		{ icon: '👥', label: 'Users', href: '/loginadmin/users' },
-		{ icon: '📁', label: 'Files', href: '/loginadmin/files' },
-		{ icon: '⚙️', label: 'Settings', href: '/loginadmin/settings' },
-		{ icon: '👤', label: 'Profile', href: '/loginadmin/profile' }
+		{ icon: '📊', label: 'Dashboard', href: '/admin' },
+		{ icon: '👥', label: 'Users', href: '/admin/users' },
+		{ icon: '📁', label: 'Files', href: '/admin/files' },
+		{ icon: '⚙️', label: 'Settings', href: '/admin/settings' },
+		{ icon: '👤', label: 'Profile', href: '/admin/profile' }
 	];
 
 	function isActive(href: string): boolean {
 		const currentPath = $page.url.pathname;
-		if (href === '/loginadmin') {
-			return currentPath === '/loginadmin';
+		if (href === '/admin') {
+			return currentPath === '/admin';
 		}
 		return currentPath.startsWith(href);
 	}
@@ -39,7 +39,7 @@
 
 <aside class="sidebar" class:collapsed={admin.sidebarCollapsed} class:mobile-open={admin.sidebarMobileOpen}>
 	<div class="sidebar-header">
-		<a href="/loginadmin" class="logo" onclick={handleLinkClick}>
+		<a href="/admin" class="logo" onclick={handleLinkClick}>
 			{#if admin.sidebarCollapsed}
 				<span class="logo-icon">A</span>
 			{:else}

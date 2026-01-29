@@ -36,11 +36,19 @@ build/
 target/
 bin/
 
+# Go compiled binaries
+backend-go-fiber/server
+backend-go-fiber/server-linux
+
 # Environment (SECRETS!)
 .env
 .env.local
 .env.production
 !.env.example
+
+# PM2 config (contains JWT_SECRET)
+ecosystem.config.js
+!ecosystem.config.js.example
 
 # IDE
 .idea/

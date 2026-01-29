@@ -68,7 +68,7 @@
 
 			if (response.success) {
 				toast.success('User created successfully');
-				goto('/loginadmin/users');
+				goto('/admin/users');
 			} else {
 				toast.error(response.error?.message || 'Failed to create user');
 			}
@@ -80,13 +80,13 @@
 	}
 
 	function handleCancel() {
-		goto('/loginadmin/users');
+		goto('/admin/users');
 	}
 </script>
 
 <div class="create-user-page">
 	<div class="page-header">
-		<a href="/loginadmin/users" class="back-link">← Back to Users</a>
+		<a href="/admin/users" class="back-link">← Back to Users</a>
 		<h2 class="page-title">Create User</h2>
 	</div>
 

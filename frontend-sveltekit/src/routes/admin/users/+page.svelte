@@ -39,7 +39,7 @@
 			label: 'Edit',
 			icon: '✏️',
 			variant: 'primary',
-			onClick: (item) => goto(`/loginadmin/users/${item.id}`)
+			onClick: (item) => goto(`/admin/users/${item.id}`)
 		},
 		{
 			label: 'Delete',
@@ -150,7 +150,7 @@
 <div class="users-page">
 	<div class="page-header">
 		<h2 class="page-title">Users</h2>
-		<a href="/loginadmin/users/new" class="btn-create">
+		<a href="/admin/users/new" class="btn-create">
 			<span>➕</span> Add User
 		</a>
 	</div>
