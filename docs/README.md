@@ -78,5 +78,8 @@ cd frontend-sveltekit && npm install && npm run dev
 
 ```bash
 # Production build
-docker-compose -f docker-compose.prod.yml up --build
+docker-compose up --build
+
+# С PostgreSQL
+docker-compose --profile postgres up --build
 ```

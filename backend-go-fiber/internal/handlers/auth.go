@@ -178,12 +178,23 @@ func (h *AuthHandler) setRefreshTokenCookie(c *fiber.Ctx, token string) {
 	secure := os.Getenv("NODE_ENV") == "production"
 	maxAge := utils.GetRefreshTokenExpiresDays() * 24 * 60 * 60
 
+	// COOKIE_SAMESITE: Lax (default), None (Telegram WebApp), Strict
+	// Use "None" for embedded contexts (Telegram WebApp, iframes)
+	sameSite := os.Getenv("COOKIE_SAMESITE")
+	if sameSite != "None" && sameSite != "Strict" {
+		sameSite = "Lax"
+	}
+	// SameSite=None requires Secure=true
+	if sameSite == "None" {
+		secure = true
+	}
+
 	c.Cookie(&fiber.Cookie{
 		Name:     refreshTokenCookie,
 		Value:    token,
 		HTTPOnly: true,
 		Secure:   secure,
-		SameSite: "Lax",
+		SameSite: sameSite,
 		MaxAge:   maxAge,
 		Path:     "/",
 		Expires:  time.Now().Add(time.Duration(maxAge) * time.Second),

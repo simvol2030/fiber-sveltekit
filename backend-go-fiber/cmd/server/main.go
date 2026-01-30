@@ -142,14 +142,25 @@ func main() {
 	}
 
 	// Create Fiber app
-	app := fiber.New(fiber.Config{
+	fiberConfig := fiber.Config{
 		Prefork:      prefork, // Enable with PREFORK=true (requires PostgreSQL!)
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 10 * time.Second,
 		IdleTimeout:  30 * time.Second,
 		BodyLimit:    10 * 1024 * 1024, // 10MB
 		ErrorHandler: errorHandler,
-	})
+	}
+
+	// Trust reverse proxy headers (nginx, Cloudflare) for correct c.IP()
+	// TRUSTED_PROXIES=127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+	if trustedProxies := os.Getenv("TRUSTED_PROXIES"); trustedProxies != "" {
+		fiberConfig.EnableTrustedProxyCheck = true
+		fiberConfig.TrustedProxies = strings.Split(trustedProxies, ",")
+		fiberConfig.ProxyHeader = fiber.HeaderXForwardedFor
+		log.Info().Strs("proxies", fiberConfig.TrustedProxies).Msg("Trusted proxies configured")
+	}
+
+	app := fiber.New(fiberConfig)
 
 	// Global middleware
 	app.Use(recover.New())
@@ -161,7 +172,7 @@ func main() {
 	app.Use(middleware.CORSMiddleware())
 	app.Use(middleware.RateLimiterMiddleware())
 	app.Use(logger.New(logger.Config{
-		Format:     "${time} | ${status} | ${latency} | ${ip} | ${method} | ${path}\n",
+		Format:     "${time} | ${status} | ${latency} | ${ip} | ${method} | ${path} | ${locals:requestId}\n",
 		TimeFormat: "2006-01-02 15:04:05",
 	}))
 
