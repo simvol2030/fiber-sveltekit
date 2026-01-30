@@ -9,6 +9,7 @@
 	let password = $state('');
 	let error = $state('');
 	let isSubmitting = $state(false);
+	let isNavigating = $state(false);
 
 	function getRedirectUrl(role?: string): string {
 		const redirectParam = $page.url.searchParams.get('redirect');
@@ -23,9 +24,10 @@
 		return '/dashboard';
 	}
 
-	// Redirect if already authenticated
+	// Redirect if already authenticated (e.g. user lands on /login while logged in)
 	$effect(() => {
-		if (!auth.isLoading && auth.isAuthenticated) {
+		if (!isNavigating && !auth.isLoading && auth.isAuthenticated) {
+			isNavigating = true;
 			goto(getRedirectUrl(auth.user?.role));
 		}
 	});
@@ -38,6 +40,7 @@
 		const result = await login(email, password);
 
 		if (result.success) {
+			isNavigating = true;
 			goto(getRedirectUrl(auth.user?.role));
 		} else {
 			error = result.error || 'Login failed';
