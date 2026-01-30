@@ -129,6 +129,51 @@ func (h *AuthHandler) Me(c *fiber.Ctx) error {
 	return utils.SendSuccess(c, user.ToResponse())
 }
 
+func (h *AuthHandler) UpdateProfile(c *fiber.Ctx) error {
+	userPayload := c.Locals("user").(*utils.JWTPayload)
+
+	var input services.UpdateProfileInput
+	if err := c.BodyParser(&input); err != nil {
+		return utils.SendError(c, "VALIDATION_ERROR", "Invalid request body", fiber.StatusBadRequest)
+	}
+
+	validationErrors := utils.ValidateStruct(input)
+	if utils.HasValidationErrors(validationErrors) {
+		return utils.SendValidationError(c, validationErrors)
+	}
+
+	user, err := h.authService.UpdateProfile(userPayload.UserID, input)
+	if err != nil {
+		return utils.SendError(c, "INTERNAL_ERROR", "Failed to update profile", fiber.StatusInternalServerError)
+	}
+
+	return utils.SendSuccess(c, user.ToResponse())
+}
+
+func (h *AuthHandler) ChangePassword(c *fiber.Ctx) error {
+	userPayload := c.Locals("user").(*utils.JWTPayload)
+
+	var input services.ChangePasswordInput
+	if err := c.BodyParser(&input); err != nil {
+		return utils.SendError(c, "VALIDATION_ERROR", "Invalid request body", fiber.StatusBadRequest)
+	}
+
+	validationErrors := utils.ValidateStruct(input)
+	if utils.HasValidationErrors(validationErrors) {
+		return utils.SendValidationError(c, validationErrors)
+	}
+
+	err := h.authService.ChangePassword(userPayload.UserID, input)
+	if err != nil {
+		if err.Error() == "current password is incorrect" {
+			return utils.SendError(c, "INVALID_PASSWORD", err.Error(), fiber.StatusBadRequest)
+		}
+		return utils.SendError(c, "INTERNAL_ERROR", "Failed to change password", fiber.StatusInternalServerError)
+	}
+
+	return utils.SendSuccess(c, fiber.Map{"message": "Password changed successfully"})
+}
+
 func (h *AuthHandler) setRefreshTokenCookie(c *fiber.Ctx, token string) {
 	secure := os.Getenv("NODE_ENV") == "production"
 	maxAge := utils.GetRefreshTokenExpiresDays() * 24 * 60 * 60

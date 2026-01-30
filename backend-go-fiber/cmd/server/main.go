@@ -256,6 +256,8 @@ func main() {
 	auth.Post("/refresh", authHandler.Refresh)
 	auth.Post("/logout", authHandler.Logout)
 	auth.Get("/me", middleware.AuthMiddleware(), authHandler.Me)
+	auth.Put("/profile", middleware.AuthMiddleware(), authHandler.UpdateProfile)
+	auth.Put("/change-password", middleware.AuthMiddleware(), authHandler.ChangePassword)
 
 	// Password reset routes: /api/auth/*
 	auth.Post("/forgot-password", passwordResetHandler.ForgotPassword)

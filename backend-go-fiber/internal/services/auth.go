@@ -165,3 +165,53 @@ func (s *AuthService) GetUserByID(userID string) (*models.User, error) {
 	}
 	return &user, nil
 }
+
+// UpdateProfileInput represents the profile update request
+type UpdateProfileInput struct {
+	Name *string `json:"name" validate:"omitempty,max=100"`
+}
+
+// UpdateProfile updates the user's name
+func (s *AuthService) UpdateProfile(userID string, input UpdateProfileInput) (*models.User, error) {
+	var user models.User
+	if err := s.db.Where("id = ?", userID).First(&user).Error; err != nil {
+		return nil, errors.New("user not found")
+	}
+
+	user.Name = input.Name
+	if err := s.db.Save(&user).Error; err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+// ChangePasswordInput represents the password change request
+type ChangePasswordInput struct {
+	CurrentPassword string `json:"currentPassword" validate:"required"`
+	NewPassword     string `json:"newPassword" validate:"required,min=8,max=128"`
+}
+
+// ChangePassword changes the user's password after verifying the current one
+func (s *AuthService) ChangePassword(userID string, input ChangePasswordInput) error {
+	var user models.User
+	if err := s.db.Where("id = ?", userID).First(&user).Error; err != nil {
+		return errors.New("user not found")
+	}
+
+	if !utils.VerifyPassword(input.CurrentPassword, user.PasswordHash) {
+		return errors.New("current password is incorrect")
+	}
+
+	newHash, err := utils.HashPassword(input.NewPassword)
+	if err != nil {
+		return err
+	}
+
+	user.PasswordHash = newHash
+	if err := s.db.Save(&user).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
