@@ -92,6 +92,46 @@ func RateLimiterMiddleware() fiber.Handler {
 	})
 }
 
+// LoginRateLimiter limits login attempts: 5 per 5 minutes per IP
+func LoginRateLimiter() fiber.Handler {
+	return limiter.New(limiter.Config{
+		Max:        5,
+		Expiration: 5 * time.Minute,
+		KeyGenerator: func(c *fiber.Ctx) string {
+			return "login:" + c.IP()
+		},
+		LimitReached: func(c *fiber.Ctx) error {
+			return c.Status(fiber.StatusTooManyRequests).JSON(fiber.Map{
+				"success": false,
+				"error": fiber.Map{
+					"code":    "RATE_LIMIT_EXCEEDED",
+					"message": "Too many login attempts. Try again in 5 minutes.",
+				},
+			})
+		},
+	})
+}
+
+// RegisterRateLimiter limits registration attempts: 3 per hour per IP
+func RegisterRateLimiter() fiber.Handler {
+	return limiter.New(limiter.Config{
+		Max:        3,
+		Expiration: 1 * time.Hour,
+		KeyGenerator: func(c *fiber.Ctx) string {
+			return "register:" + c.IP()
+		},
+		LimitReached: func(c *fiber.Ctx) error {
+			return c.Status(fiber.StatusTooManyRequests).JSON(fiber.Map{
+				"success": false,
+				"error": fiber.Map{
+					"code":    "RATE_LIMIT_EXCEEDED",
+					"message": "Too many registration attempts. Try again later.",
+				},
+			})
+		},
+	})
+}
+
 func RequestIDMiddleware() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		requestID := uuid.New().String()
