@@ -52,12 +52,24 @@
 			{/if}
 		</div>
 
+		{#if user?.role === 'admin'}
+			<section class="dashboard-section">
+				<a href="/admin" class="admin-panel-link">
+					<span class="admin-panel-icon">&#9881;</span>
+					<span>
+						<strong>Admin Panel</strong>
+						<small>Manage users, files and settings</small>
+					</span>
+					<span class="admin-panel-arrow">&rarr;</span>
+				</a>
+			</section>
+		{/if}
+
 		<section class="dashboard-section">
 			<h2>Quick Actions</h2>
 			<div class="actions">
-				<button class="btn-secondary">Edit Profile</button>
-				<button class="btn-secondary">Change Password</button>
-				<button class="btn-secondary">Account Settings</button>
+				<a href="/dashboard/profile" class="btn-secondary">Edit Profile</a>
+				<a href="/dashboard/profile" class="btn-secondary">Change Password</a>
 			</div>
 		</section>
 
@@ -126,6 +138,46 @@
 	}
 
 	.no-activity {
+		color: var(--color-text-secondary);
+	}
+
+	.admin-panel-link {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding: 1rem 1.5rem;
+		background: var(--color-bg);
+		border: 1px solid var(--admin-badge-admin, #4f46e5);
+		border-radius: var(--radius);
+		text-decoration: none;
+		color: var(--color-text);
+		transition: background-color 0.2s, box-shadow 0.2s;
+	}
+
+	.admin-panel-link:hover {
+		background: var(--color-bg-secondary);
+		box-shadow: var(--shadow-md);
+		text-decoration: none;
+	}
+
+	.admin-panel-link strong {
+		display: block;
+		font-size: 1rem;
+	}
+
+	.admin-panel-link small {
+		color: var(--color-text-secondary);
+		font-size: 0.8125rem;
+	}
+
+	.admin-panel-icon {
+		font-size: 1.5rem;
+		color: var(--admin-badge-admin, #4f46e5);
+	}
+
+	.admin-panel-arrow {
+		margin-left: auto;
+		font-size: 1.25rem;
 		color: var(--color-text-secondary);
 	}
 </style>
