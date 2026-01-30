@@ -2,6 +2,115 @@
 
 Production-ready starter template with **Go Fiber v2** + **GORM** backend and **SvelteKit** + **Svelte 5** frontend.
 
+---
+
+## New Project from This Template
+
+Clone the repo and start building your project in minutes.
+
+### Step 1: Clone and rename
+
+```bash
+git clone https://github.com/simvol2030/fiber-sveltekit.git my-project
+cd my-project
+
+# Point to your own repository
+git remote set-url origin https://github.com/YOUR_USER/YOUR_REPO.git
+```
+
+### Step 2: Change these values
+
+| What | Where | Change to |
+|------|-------|-----------|
+| **JWT_SECRET** | `ecosystem.config.js` or `.env` | New random string 32+ chars. Generate: `openssl rand -base64 32` |
+| **Domain** | `ecosystem.config.js` → `CORS_ORIGINS`, `FRONTEND_URL`, `ORIGIN` | Your domain (e.g. `https://my-app.com`) |
+| **App name** | `frontend-sveltekit/package.json` → `name` | Your project name |
+| **App title** | `frontend-sveltekit/src/app.html` → `<title>` | Your app title |
+| **Footer** | `frontend-sveltekit/src/routes/+layout.svelte` | Your company/project name |
+| **Admin email** | Database seed or first register | Your admin email |
+
+### Step 3: Reset database (clean start)
+
+```bash
+# Delete existing database
+rm -f data/db/sqlite/app.db
+
+# Start backend — GORM auto-creates tables on first run
+# Register your admin user at /register, then set role in DB:
+sqlite3 data/db/sqlite/app.db "UPDATE users SET role='admin' WHERE email='your@email.com';"
+```
+
+### Step 4: Choose deployment method
+
+**Option A: PM2 (lightweight, recommended for VPS)**
+```bash
+# Copy PM2 config template and fill in your values
+cp ecosystem.config.js.example ecosystem.config.js
+# Edit ecosystem.config.js — change JWT_SECRET, domain, paths
+
+# Build
+cd backend-go-fiber && go build -o server cmd/server/main.go
+cd ../frontend-sveltekit && npm install && npm run build
+
+# Start
+pm2 start ecosystem.config.js
+pm2 save
+```
+
+**Option B: Docker**
+```bash
+cp .env.example .env
+# Edit .env — change JWT_SECRET, domain
+docker-compose up --build -d
+```
+
+### Step 5: Nginx + SSL
+
+```bash
+# Create nginx config (replace YOUR_DOMAIN)
+sudo nano /etc/nginx/sites-available/YOUR_DOMAIN
+
+# Template:
+# server {
+#     server_name YOUR_DOMAIN;
+#     location / { proxy_pass http://127.0.0.1:3000; ... }
+#     location /api/ { proxy_pass http://127.0.0.1:3001; ... }
+#     location /health { proxy_pass http://127.0.0.1:3001; }
+#     location /uploads/ { proxy_pass http://127.0.0.1:3001; }
+#     client_max_body_size 10M;
+# }
+
+sudo ln -s /etc/nginx/sites-available/YOUR_DOMAIN /etc/nginx/sites-enabled/
+sudo nginx -t && sudo systemctl reload nginx
+
+# SSL
+sudo certbot --nginx -d YOUR_DOMAIN
+```
+
+### What you get out of the box
+
+- **Auth**: Register, login, logout, refresh tokens, password reset
+- **Admin panel**: `/admin` — users CRUD, file browser with upload, app settings
+- **User dashboard**: `/dashboard` — profile, name edit, password change
+- **Rate limiting**: Login (5/5min), register (3/hour), global (100/min)
+- **Security**: Helmet, CORS, JWT httpOnly cookies, input validation
+- **File upload**: Drag-and-drop, validation (type + size), S3-ready
+- **Logging**: Structured JSON (zerolog)
+- **Health checks**: `/health`, `/ready`
+- **SEO**: robots.txt, sitemap.xml, meta tags, schema.org
+
+### What to add per project
+
+```
+Your models     →  backend-go-fiber/internal/models/
+Your handlers   →  backend-go-fiber/internal/handlers/
+Your services   →  backend-go-fiber/internal/services/
+Your pages      →  frontend-sveltekit/src/routes/
+Your components →  frontend-sveltekit/src/lib/components/
+```
+
+---
+
 ## Features
 
 ### Core
