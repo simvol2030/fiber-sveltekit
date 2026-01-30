@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { login, getAuthState } from '$stores/auth.svelte';
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 
 	const auth = getAuthState();
 
@@ -9,10 +10,23 @@
 	let error = $state('');
 	let isSubmitting = $state(false);
 
+	function getRedirectUrl(role?: string): string {
+		const redirectParam = $page.url.searchParams.get('redirect');
+		// Only allow relative paths starting with / (prevent open redirect)
+		if (redirectParam && redirectParam.startsWith('/')) {
+			return redirectParam;
+		}
+		// Role-based default redirect
+		if (role === 'admin') {
+			return '/admin';
+		}
+		return '/dashboard';
+	}
+
 	// Redirect if already authenticated
 	$effect(() => {
 		if (!auth.isLoading && auth.isAuthenticated) {
-			goto('/dashboard');
+			goto(getRedirectUrl(auth.user?.role));
 		}
 	});
 
@@ -24,7 +38,7 @@
 		const result = await login(email, password);
 
 		if (result.success) {
-			goto('/dashboard');
+			goto(getRedirectUrl(auth.user?.role));
 		} else {
 			error = result.error || 'Login failed';
 		}
@@ -76,6 +90,10 @@
 			</button>
 		</form>
 
+		<p class="forgot-password-link">
+			<a href="/forgot-password">Forgot password?</a>
+		</p>
+
 		<p class="auth-footer">
 			Don't have an account? <a href="/register">Sign up</a>
 		</p>
@@ -112,9 +130,15 @@
 		margin-top: 0.5rem;
 	}
 
+	.forgot-password-link {
+		text-align: center;
+		margin-top: 1rem;
+		font-size: 0.875rem;
+	}
+
 	.auth-footer {
 		text-align: center;
-		margin-top: 1.5rem;
+		margin-top: 1rem;
 		color: var(--color-text-secondary);
 	}
 </style>
